@@ -1,6 +1,7 @@
 const jwt = require ('jsonwebtoken');
 const { graphql } = require('graphql');
 const { combineResolvers} = require ('graphql-resolvers'); 
+const bcrypt = require ('bcrypt'); 
 
 
 const User = require('../database/models/user');

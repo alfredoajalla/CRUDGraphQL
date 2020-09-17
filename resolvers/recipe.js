@@ -3,7 +3,7 @@ const { combineResolvers } = require('graphql-resolvers');
 
 const Recipe = require('../database/models/recipe');
 const User = require('../database/models/user');
-const Category = require ('../database/models/category');
+const Category = require('../database/models/category');
 const { isAuthenticated, isRecipeOwner } = require('./middleware');
 const recipe = require('../typeDefs/recipe');
 
@@ -11,15 +11,15 @@ const recipe = require('../typeDefs/recipe');
 module.exports = {
     Query: {
 
-        getMyRecipes: combineResolvers(isAuthenticated, async (_, { cursor, limit=10}, { loggedInUserId }) => {
+        getMyRecipes: combineResolvers(isAuthenticated, async (_, { cursor, limit = 10 }, { loggedInUserId }) => {
             try {
                 const query = { user: loggedInUserId };
-                if (cursor){
-                    query ['_id']={
-                        '$lt':cursor
+                if (cursor) {
+                    query['_id'] = {
+                        '$lt': cursor
                     }
                 }
-                const recipes = await Recipe.find(query).sort ( { _id:-1} ).limit(limit);
+                const recipes = await Recipe.find(query).sort({ _id: -1 }).limit(limit);
                 return recipes;
             } catch (error) {
                 console.log(error);
@@ -38,7 +38,7 @@ module.exports = {
             }
 
         }),
-        getRecipes : () => {
+        getRecipes: () => {
             try {
                 const recipes = Recipe.find();
                 return recipes;
@@ -67,24 +67,24 @@ module.exports = {
             }
 
         }),
-        
-        updateRecipe: combineResolvers(isAuthenticated, isRecipeOwner, async (_, {id, input})=>{
+
+        updateRecipe: combineResolvers(isAuthenticated, isRecipeOwner, async (_, { id, input }) => {
             try {
-                const recipe = await Recipe.findByIdAndUpdate (id, {...input}, {new: true }); 
+                const recipe = await Recipe.findByIdAndUpdate(id, { ...input }, { new: true });
                 return recipe;
-                
+
             } catch (error) {
                 console.log(error);
                 throw error;
             }
         }),
 
-        deleteRecipe: combineResolvers (isAuthenticated, isRecipeOwner, async (_, { id }, {loggedInUserId})=>{
+        deleteRecipe: combineResolvers(isAuthenticated, isRecipeOwner, async (_, { id }, { loggedInUserId }) => {
             try {
-                const recipe = await Recipe.findByIdAndDelete (id);
-                await User.updateOne ({ _id:loggedInUserId }, { $pull:{ recipes:recipe.id } });
+                const recipe = await Recipe.findByIdAndDelete(id);
+                await User.updateOne({ _id: loggedInUserId }, { $pull: { recipes: recipe.id } });
                 return recipe;
-                
+
             } catch (error) {
                 console.log(error);
                 throw error;
@@ -93,7 +93,7 @@ module.exports = {
         }),
     },
     Recipe: {
-        user : async ({ user }) => {
+        user: async ({ user }) => {
             try {
                 const userById = await User.findById(user);
                 return userById;
@@ -104,16 +104,16 @@ module.exports = {
                 throw error;
             }
         },
-        category : async ( {category} )=> {
+        category: async ({ category }) => {
             try {
-                const categoryById = await Category.findById (category);
+                const categoryById = await Category.findById(category);
                 return categoryById;
-                
+
             } catch (error) {
                 console.log(error);
                 throw error;
-            } 
-        } 
+            }
+        }
 
     },
 }
