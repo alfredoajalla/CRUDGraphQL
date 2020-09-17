@@ -1,6 +1,6 @@
-const {gql} = require ('apollo-server-express');
+const { gql } = require('apollo-server-express');
 
-module.exports  = gql`
+module.exports = gql`
 
 extend type Query {
     getCategories:[Category!]
@@ -14,16 +14,12 @@ input createCategoryInput {
 input updateCategoryInput {
     name:String!
 }
-
-
-
 extend type Mutation {
     createCategory (input:createCategoryInput!):Category
     updateCategory (id:ID!, input:updateCategoryInput):Category
     deleteCategory (id:ID!): Category
     
 }
-
 type Category {
     id:ID!
     name:String
