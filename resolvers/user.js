@@ -1,9 +1,7 @@
-const uuid = require('uuid');
-const bcrypt = require ('bcrypt');
 const jwt = require ('jsonwebtoken');
 const { graphql } = require('graphql');
 const { combineResolvers} = require ('graphql-resolvers'); 
-const {categories, ingredients} = require ('../constants'); 
+
 
 const User = require('../database/models/user');
 const Recipe = require ('../database/models/recipe');
